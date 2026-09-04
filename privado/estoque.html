@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koncreta | Controle de Estoque</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --koncreta-orange: #d35400;
+            --koncreta-dark: #2c3e50;
+            --koncreta-light-bg: #f8f9fa;
+        }
+
+        body {
+            background-color: #fcfcfc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header-brand {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+            border-bottom: 4px solid var(--koncreta-orange) !important;
+        }
+
+        .header-brand h1 {
+            font-weight: 800;
+            color: var(--koncreta-dark);
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+        }
+
+        .header-brand h1 span {
+            color: var(--koncreta-orange);
+        }
+
+        .btn-back {
+            background-color: #f2f2f2;
+            color: #666;
+            border: 1px solid #ddd;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: var(--koncreta-dark);
+            color: white;
+            border-color: var(--koncreta-dark);
+            transform: translateY(-2px);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            border: 1px solid #eee;
+        }
+
+        .badge-estoque {
+            background-color: rgba(211, 84, 0, 0.1) !important;
+            color: var(--koncreta-orange) !important;
+            border: 1px solid var(--koncreta-orange);
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: var(--koncreta-orange);
+            border: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #a84300;
+            transform: translateY(-2px);
+        }
+
+        .modal-header-brand {
+            background-color: var(--koncreta-orange);
+            color: white;
+            border-bottom: none;
+        }
+
+        .text-koncreta {
+            color: var(--koncreta-orange);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header com Identidade Visual da Koncreta -->
+    <header class="header-brand py-4 mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a href="/main" class="btn btn-back rounded-pill px-4 shadow-sm">
+                <i class="bi bi-arrow-left me-2"></i>Voltar
+            </a>
+
+            <div class="text-center">
+                <h1 class="m-0">🏗️ <span>Sistema</span> Koncreta 🧱</h1>
+                <small class="text-muted text-uppercase tracking-widest d-block mt-1" style="font-size: 0.6rem; letter-spacing: 2px;">Gestão de Estoque</small>
+            </div>
+
+            <div style="width: 110px;" class="d-none d-md-block"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <!-- Container da Tabela Adaptado -->
+                    <div class="table-container mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="h4 m-0 text-secondary fw-bold">Controle de Materiais e Insumos</h2>
+                            <span class="badge badge-estoque rounded-pill px-3 py-2">Monitoramento Ativo</span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="py-3 border-0">Produto / Material</th>
+                                        <th class="py-3 border-0">Categoria</th>
+                                        <th class="py-3 border-0 text-center">Quantidade</th>
+                                        <th class="py-3 border-0 text-center">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Conteúdo preenchido pelo script -->
+                                    <tr>
+                                        <td class="fw-bold text-dark">Cimento CP II Votoran (sc)</td>
+                                        <td><span class="badge border text-muted">Cimento</span></td>
+                                        <td class="text-center">
+                                            <span class="fw-bold fs-5">10</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-primary btn-sm px-3 shadow-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modal-acao">
+                                                <i class="bi bi-box-seam me-1"></i> Movimentar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Movimentação Temático da Koncreta -->
+    <div class="modal fade" id="modal-acao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header modal-header-brand text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-arrow-left-right me-2"></i>Movimentação de Estoque</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form method="post" action="/cadastrar-movimentacao">
+                    <div class="modal-body p-4">
+                        <input type="text" id="id" name="id" hidden>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted" for="nome">Material</label>
+                                <input class="form-control bg-light border-0" type="text" id="nome" name="nome" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted" for="categoria">Categoria</label>
+                                <input class="form-control bg-light border-0" type="text" id="categoria" name="categoria" disabled>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold" for="data">Data da Operação</label>
+                            <input class="form-control" type="date" id="data" name="data" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold" for="quantidade">Quantidade de Itens</label>
+                            <input class="form-control form-control-lg" type="number" id="quantidade" name="quantidade" value="1" min="1" required>
+                        </div>
+
+                        <!-- Card de escolha do tipo de movimentação -->
+                        <div class="p-3 rounded-3 border" style="background-color: #fdf5ef; border-color: rgba(211, 84, 0, 0.15) !important;">
+                            <label class="form-label d-block fw-bold mb-2 text-dark">Tipo de Movimentação</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="entrada" id="entrada" name="status">
+                                    <label class="form-check-label text-success fw-bold" for="entrada">
+                                        <i class="bi bi-plus-circle-fill"></i> Entrada
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="saida" id="saida" name="status" checked>
+                                    <label class="form-check-label text-koncreta fw-bold" for="saida">
+                                        <i class="bi bi-dash-circle-fill"></i> Saída
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer bg-light border-0">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary px-4 fw-bold shadow rounded-pill" type="submit">
+                            Registrar no Sistema
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const consultarEstoque = async () => {
+            const resposta = await fetch("/consultar-estoque")
+            const dados = await resposta.json()
+            let conteudo = ""
+
+            for (let dado of dados) {
+                conteudo += `
+                    <tr>
+                        <td class="fw-bold text-dark">${dado.nome}</td>
+                        <td><span class="badge border text-muted">${dado.categoria}</span></td>
+                        <td class="text-center">
+                            <span class="fs-5 fw-bold ${dado.quantidade < 5 ? 'text-danger' : 'text-dark'}">
+                                ${dado.quantidade}
+                            </span>
+                            ${dado.quantidade < 5
+                                ? `<i class="bi bi-exclamation-triangle-fill text-danger ms-2" title="Estoque crítico!"></i>`
+                                : ``}
+                        </td>
+                        <td class="text-center">
+                            <button
+                                class="btn btn-primary btn-sm px-3 shadow-sm rounded-pill"
+                                data-nome="${dado.nome}"
+                                data-categoria="${dado.categoria}"
+                                data-id="${dado.id}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-acao">
+                                <i class="bi bi-box-seam me-1"></i> Movimentar
+                            </button>
+                        </td>
+                    </tr>`
+            }
+            document.querySelector("tbody").innerHTML = conteudo
+        }
+
+        consultarEstoque()
+
+        const modalAcao = document.querySelector("#modal-acao")
+        modalAcao.addEventListener("show.bs.modal", (evento) => {
+            const botao = evento.relatedTarget
+            const produtoSelecionado = botao.dataset
+            document.querySelector("#id").value = produtoSelecionado.id
+            document.querySelector("#nome").value = produtoSelecionado.nome
+            document.querySelector("#categoria").value = produtoSelecionado.categoria
+        })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

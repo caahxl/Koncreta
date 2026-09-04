@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koncreta | Gestão de Materiais</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --koncreta-orange: #d35400;
+            --koncreta-dark: #2c3e50;
+            --koncreta-light-bg: #f8f9fa;
+        }
+
+        body {
+            background-color: #fcfcfc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header-brand {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+            border-bottom: 4px solid var(--koncreta-orange) !important;
+        }
+
+        .header-brand h1 {
+            font-weight: 800;
+            color: var(--koncreta-dark);
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+        }
+
+        .header-brand h1 span {
+            color: var(--koncreta-orange);
+        }
+
+        .btn-panel-back {
+            background-color: #f2f2f2;
+            color: #666;
+            border: 1px solid #ddd;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-panel-back:hover {
+            background-color: var(--koncreta-dark);
+            color: white;
+            border-color: var(--koncreta-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-brand {
+            background-color: var(--koncreta-orange);
+            color: white;
+            border: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-brand:hover {
+            background-color: #a84300;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            border: 1px solid #eee;
+        }
+
+        .search-section {
+            background-color: var(--koncreta-light-bg);
+            border-bottom: 1px solid #eee;
+        }
+
+        .badge-category {
+            background-color: rgba(211, 84, 0, 0.1);
+            color: var(--koncreta-orange);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .badge-application {
+            background-color: rgba(44, 62, 80, 0.1);
+            color: var(--koncreta-dark);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .modal-header-brand {
+            background-color: var(--koncreta-orange);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-header-edit {
+            background-color: var(--koncreta-dark);
+            color: white;
+            border-bottom: none;
+        }
+        
+        .spec-text {
+            font-size: 0.85rem;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <header class="header-brand py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/main" class="btn btn-panel-back rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Painel
+                </a>
+                <div class="text-center">
+                    <h1 class="m-0">🏗️ <span>Sistema</span> Koncreta 🧱</h1>
+                    <small class="text-muted text-uppercase tracking-widest d-block mt-1"
+                        style="font-size: 0.6rem;">Gestão de Estoque e Materiais</small>
+                </div>
+                <button class="btn btn-brand rounded-pill px-4 shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#modal-cadastrar">
+                    <i class="bi bi-plus-lg me-1"></i> Novo Material
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-4 search-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="input-group shadow-sm overflow-hidden" style="border-radius: 50px;">
+                        <span class="input-group-text bg-white border-end-0 ps-4">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input class="form-control border-start-0 ps-2" type="text" id="buscar" name="buscar"
+                            placeholder="Ex: Cimento, Areia, Tinta, Tijolo...">
+                        <button id="btn-buscar" class="btn btn-dark px-4">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="h4 m-0 fw-bold">Catálogo de Materiais de Construção</h2>
+                            <p class="small text-muted mb-0">Gerenciamento de especificações, aplicações e unidades de medida.</p>
+                        </div>
+                        <span class="badge rounded-pill bg-success px-3 py-2">Sistema Online</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 border-0">Cód.</th>
+                                    <th class="py-3 border-0">Material / Especificações</th>
+                                    <th class="py-3 border-0">Categoria</th>
+                                    <th class="py-3 border-0">Aplicação</th>
+                                    <th class="py-3 border-0">Preço Unitário</th>
+                                    <th class="py-3 border-0 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="modal-cadastrar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 overflow-hidden shadow">
+                <div class="modal-header modal-header-brand p-4">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-box-seam me-2"></i>Cadastrar Novo Material</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/cadastrar-produto">
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="nome">Nome do Material</label>
+                                <input class="form-control bg-light border-0" type="text" id="nome" name="nome" placeholder="Ex: Cimento CP II Votoran" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="categoria">Categoria</label>
+                                <select class="form-select bg-light border-0" id="categoria" name="categoria" required>
+                                    <option value="" selected disabled>Selecione...</option>
+                                    <option value="Cimento">Cimento</option>
+                                    <option value="Tinta">Tinta</option>
+                                    <option value="Tijolo">Tijolo</option>
+                                    <option value="Esquadria">Esquadria</option>
+                                    <option value="Areia">Areia</option>
+                                    <option value="Brita">Brita</option>
+                                    <option value="Telha">Telha</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="unidade_medida">Unidade de Medida</label>
+                                <select class="form-select bg-light border-0" id="unidade_medida" name="unidade_medida" required>
+                                    <option value="kg">kg (Quilograma)</option>
+                                    <option value="litros">litros (Litros)</option>
+                                    <option value="unidade">unidade (Unidade)</option>
+                                    <option value="m2">m² (Metro Quadrado)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="peso">Peso (Opcional)</label>
+                                <input class="form-control bg-light border-0" type="number" step="0.01" id="peso" name="peso" placeholder="Ex: 50.00">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="aplicacao">Aplicação</label>
+                                <select class="form-select bg-light border-0" id="aplicacao" name="aplicacao" required>
+                                    <option value="Fundação">Fundação</option>
+                                    <option value="Estrutura">Estrutura</option>
+                                    <option value="Acabamento">Acabamento</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="cor">Cor (Se houver)</label>
+                                <input class="form-control bg-light border-0" type="text" id="cor" name="cor" placeholder="Ex: Branco, Amarelo">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="textura">Textura (Se houver)</label>
+                                <input class="form-control bg-light border-0" type="text" id="textura" name="textura" placeholder="Ex: Fosco, Madeira">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" for="material_fabricacao">Material de Fabricação</label>
+                                <input class="form-control bg-light border-0" type="text" id="material_fabricacao" name="material_fabricacao" placeholder="Ex: Alumínio, Argila">
+                            </div>
+                            <div class="col-md-12 mb-0">
+                                <label class="form-label fw-bold small text-uppercase" for="preco">Preço Unitário de Venda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0 text-muted">R$</span>
+                                    <input class="form-control bg-light border-0" type="number" id="preco" name="preco" min="0" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-0 p-3">
+                        <button type="button" class="btn btn-link text-dark text-decoration-none" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-brand px-4 rounded-pill fw-bold" type="submit">Salvar Material</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-excluir" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white border-0">
+                    <h5 class="modal-title"><i class="bi bi-trash3 me-2"></i>Remover Item do Estoque</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/excluir-produto">
+                    <div class="modal-body p-4 text-center">
+                        <i class="bi bi-exclamation-octagon text-danger display-4 mb-3"></i>
+                        <h5 class="fw-bold">Confirmar Exclusão?</h5>
+                        <p class="text-muted">Esta ação removerá permanentemente o item do banco de dados.</p>
+                        <input id-excluir type="text" name="id" required hidden>
+                        <div class="bg-light p-3 rounded-3 text-start mt-3 border">
+                            <input nome-excluir class="form-control-plaintext fw-bold p-0 text-center fs-5" type="text" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 d-flex justify-content-center pb-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger rounded-pill px-4" type="submit">Confirmar Exclusão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-editar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header modal-header-edit p-4">
+                    <h5 class="modal-title fw-bold text-white"><i class="bi bi-pencil-square me-2"></i>Atualizar Ficha Técnica</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/editar-produto">
+                    <div class="modal-body p-4">
+                        <input id-editar type="text" name="id" required hidden>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Nome do Material</label>
+                                <input nome-editar class="form-control bg-light border-0" type="text" name="nome" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Categoria</label>
+                                <select categoria-editar class="form-select bg-light border-0" name="categoria" required>
+                                    <option value="Cimento">Cimento</option>
+                                    <option value="Tinta">Tinta</option>
+                                    <option value="Tijolo">Tijolo</option>
+                                    <option value="Esquadria">Esquadria</option>
+                                    <option value="Areia">Areia</option>
+                                    <option value="Brita">Brita</option>
+                                    <option value="Telha">Telha</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Unidade de Medida</label>
+                                <select unidade-editar class="form-select bg-light border-0" name="unidade_medida" required>
+                                    <option value="kg">kg</option>
+                                    <option value="litros">litros</option>
+                                    <option value="unidade">unidade</option>
+                                    <option value="m2">m²</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Peso</label>
+                                <input peso-editar class="form-control bg-light border-0" type="number" step="0.01" name="peso">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Aplicação</label>
+                                <select aplicacao-editar class="form-select bg-light border-0" name="aplicacao" required>
+                                    <option value="Fundação">Fundação</option>
+                                    <option value="Estrutura">Estrutura</option>
+                                    <option value="Acabamento">Acabamento</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Cor</label>
+                                <input cor-editar class="form-control bg-light border-0" type="text" name="cor">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Textura</label>
+                                <input textura-editar class="form-control bg-light border-0" type="text" name="textura">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold small text-uppercase">Material Fabricação</label>
+                                <input mat-editar class="form-control bg-light border-0" type="text" name="material_fabricacao">
+                            </div>
+                            <div class="col-md-12 mb-0">
+                                <label class="form-label fw-bold small text-uppercase">Preço Unitário</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">R$</span>
+                                    <input preco-editar class="form-control bg-light border-0" type="number" step="0.01" name="preco" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-link text-dark text-decoration-none" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-brand px-4 rounded-pill fw-bold" style="background-color: var(--koncreta-dark);" type="submit">Atualizar Dados</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const consultarProdutos = async () => {
+            const buscar = document.querySelector("#buscar").value;
+            const resposta = await fetch(`/consultar-produtos?buscar=${buscar}`);
+            const dados = await resposta.json();
+
+            let conteudo = "";
+            for (let dado of dados) {
+                // Tratamento inteligente de dados opcionais para a tabela externa
+                let specs = [];
+                if(dado.peso) specs.push(`Peso: ${parseFloat(dado.peso)} ${dado.unidade_medida}`);
+                if(dado.cor) specs.push(`Cor: ${dado.cor}`);
+                if(dado.textura) specs.push(`Tex: ${dado.textura}`);
+                if(dado.material_fabricacao) specs.push(`Mat: ${dado.material_fabricacao}`);
+                
+                let specsLinha = specs.length > 0 ? `<br><span class="spec-text"><i class="bi bi-info-circle me-1"></i>${specs.join(' | ')}</span>` : '';
+
+                conteudo += `
+                <tr>
+                    <td class="text-muted small">#${dado.id}</td>
+                    <td>
+                        <span class="fw-bold">${dado.nome}</span>
+                        ${specsLinha}
+                    </td>
+                    <td><span class="badge badge-category">${dado.categoria}</span></td>
+                    <td><span class="badge badge-application">${dado.aplicacao}</span></td>
+                    <td class="fw-semibold text-dark">R$ ${parseFloat(dado.preco).toFixed(2)}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <button 
+                                class="btn btn-outline-warning border-0"
+                                data-id="${dado.id}"
+                                data-nome="${dado.nome}"
+                                data-categoria="${dado.categoria}"
+                                data-preco="${dado.preco}"
+                                data-unidade_medida="${dado.unidade_medida}"
+                                data-peso="${dado.peso || ''}"
+                                data-aplicacao="${dado.aplicacao}"
+                                data-cor="${dado.cor || ''}"
+                                data-textura="${dado.textura || ''}"
+                                data-material_fabricacao="${dado.material_fabricacao || ''}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-editar">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button
+                                class="btn btn-outline-danger border-0"
+                                data-id="${dado.id}"
+                                data-nome="${dado.nome}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-excluir">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }
+
+            document.querySelector("tbody").innerHTML = conteudo;
+        }
+
+        const btnBuscar = document.querySelector("#btn-buscar");
+        btnBuscar.onclick = consultarProdutos;
+
+        document.querySelector("#buscar").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") btnBuscar.click();
+        });
+
+        // Evento Modal Excluir
+        document.querySelector("#modal-excluir").addEventListener("show.bs.modal", (evento) => {
+            const botao = evento.relatedTarget;
+            const dados = botao.dataset;
+            document.querySelector("[id-excluir]").value = dados.id;
+            document.querySelector("[nome-excluir]").value = dados.nome;
+        });
+
+        // Evento Modal Editar
+        document.querySelector("#modal-editar").addEventListener("show.bs.modal", (evento) => {
+            const botao = evento.relatedTarget;
+            const dados = botao.dataset;
+
+            document.querySelector("[id-editar]").value = dados.id;
+            document.querySelector("[nome-editar]").value = dados.nome;
+            document.querySelector("[categoria-editar]").value = dados.categoria;
+            document.querySelector("[unidade-editar]").value = dados.unidade_medida;
+            document.querySelector("[peso-editar]").value = dados.peso;
+            document.querySelector("[aplicacao-editar]").value = dados.aplicacao;
+            document.querySelector("[cor-editar]").value = dados.cor;
+            document.querySelector("[textura-editar]").value = dados.textura;
+            document.querySelector("[mat-editar]").value = dados.material_fabricacao;
+            document.querySelector("[preco-editar]").value = dados.preco;
+        });
+
+        consultarProdutos();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
